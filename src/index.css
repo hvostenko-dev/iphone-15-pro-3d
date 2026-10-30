@@ -13,6 +13,21 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Custom dark Apple scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2c;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a3c;
+}
+
 body {
   color: white;
   width: 100dvw;
@@ -31,6 +46,21 @@ body {
   max-width: 1120px;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 @layer utilities {
   .flex-center {
     @apply flex items-center justify-center;
@@ -45,27 +75,27 @@ body {
   }
 
   .color-container {
-    @apply flex items-center justify-center px-4 py-3 sm:py-4 rounded-full bg-gray-300 backdrop-blur;
+    @apply flex items-center justify-center px-4 py-3 sm:py-3.5 rounded-full bg-zinc/90 backdrop-blur-xl border border-white/10;
   }
 
   .size-btn-container {
-    @apply flex items-center justify-center p-1 rounded-full bg-gray-300 backdrop-blur ml-3 gap-1;
+    @apply flex items-center justify-center p-1 rounded-full bg-zinc/90 backdrop-blur-xl border border-white/10 gap-1;
   }
 
   .size-btn {
-    @apply w-10 h-10 text-sm flex justify-center items-center bg-white text-black rounded-full transition-all cursor-pointer;
+    @apply w-10 h-10 text-xs sm:text-sm flex justify-center items-center rounded-full transition-all cursor-pointer font-semibold;
   }
 
   .common-padding {
-    @apply sm:py-32 py-16 sm:px-10 px-5;
+    @apply sm:py-28 py-16 sm:px-10 px-5;
   }
 
   .section-heading {
-    @apply text-gray lg:text-6xl md:text-5xl sm:text-4xl text-3xl lg:mb-0 mb-4 font-medium opacity-0 translate-y-20 tracking-tight;
+    @apply text-white lg:text-6xl md:text-5xl sm:text-4xl text-3xl font-semibold opacity-0 translate-y-16 tracking-tight;
   }
 
   .feature-text {
-    @apply text-gray max-w-md text-base sm:text-lg md:text-xl font-semibold opacity-0 translate-y-[100px] leading-relaxed;
+    @apply text-gray max-w-md text-base sm:text-lg md:text-xl font-medium opacity-0 translate-y-[100px] leading-relaxed;
   }
 
   .feature-text-container {
@@ -81,11 +111,11 @@ body {
   }
 
   .link {
-    @apply text-blue hover:underline cursor-pointer flex items-center text-base sm:text-xl opacity-0 translate-y-20 transition-opacity;
+    @apply text-blue hover:text-blue/80 hover:underline cursor-pointer flex items-center text-sm sm:text-base font-medium opacity-0 translate-y-16 transition-all;
   }
 
   .control-btn {
-    @apply ml-3 sm:ml-4 p-3.5 sm:p-4 rounded-full bg-gray-300 backdrop-blur flex-center hover:bg-white/20 active:scale-95 transition-all;
+    @apply ml-3 sm:ml-4 p-3.5 sm:p-4 rounded-full bg-zinc/90 border border-white/10 backdrop-blur-xl flex-center hover:bg-white/20 active:scale-95 transition-all;
   }
 
   .hero-title {
@@ -93,11 +123,11 @@ body {
   }
 
   .hiw-title {
-    @apply text-3xl sm:text-5xl md:text-7xl font-semibold text-center tracking-tight leading-tight;
+    @apply text-3xl sm:text-5xl md:text-6xl font-semibold text-center tracking-tight leading-tight;
   }
 
   .hiw-subtitle {
-    @apply text-gray font-semibold text-lg sm:text-xl md:text-2xl py-6 sm:py-10 text-center max-w-2xl mx-auto;
+    @apply text-gray font-medium text-base sm:text-lg md:text-xl py-4 sm:py-8 text-center max-w-2xl mx-auto;
   }
 
   .hiw-video {
@@ -109,7 +139,7 @@ body {
   }
 
   .hiw-text {
-    @apply text-gray text-base sm:text-xl font-normal md:font-semibold leading-relaxed;
+    @apply text-gray text-base sm:text-lg font-normal md:font-medium leading-relaxed;
   }
 
   .hiw-bigtext {
@@ -121,6 +151,6 @@ body {
   }
 
   .g_fadeIn {
-    @apply opacity-0 translate-y-[100px];
+    @apply opacity-0 translate-y-[80px];
   }
 }

@@ -1,5 +1,4 @@
 import { OrbitControls, PerspectiveCamera, View } from "@react-three/drei";
-
 import * as THREE from "three";
 import Lights from "./Lights";
 import Loader from "./Loader";
@@ -16,6 +15,7 @@ const ModelView = ({
     item,
     isMobile = false,
     interactive = true,
+    autoRotate = false,
 }) => {
     const modelScale =
         index === 1
@@ -34,10 +34,9 @@ const ModelView = ({
                 !interactive ? "pointer-events-none" : "cursor-grab active:cursor-grabbing"
             }`}
         >
-            {/* Ambient Light */}
-            <ambientLight intensity={0.3} />
+            <ambientLight intensity={0.45} />
 
-            <PerspectiveCamera makeDefault position={[0, 0, 4]} />
+            <PerspectiveCamera makeDefault position={[0, 0, 4]} fov={isMobile ? 55 : 45} />
 
             <Lights />
 
@@ -47,12 +46,19 @@ const ModelView = ({
                 enabled={interactive}
                 enableZoom={false}
                 enablePan={false}
-                rotateSpeed={0.4}
+                enableDamping={true}
+                dampingFactor={0.06}
+                rotateSpeed={0.5}
+                autoRotate={autoRotate}
+                autoRotateSpeed={1.8}
+                minPolarAngle={Math.PI / 3.2}
+                maxPolarAngle={Math.PI / 1.6}
                 target={new THREE.Vector3(0, 0, 0)}
-                onEnd={() =>
-                    controlRef.current &&
-                    setRotationState(controlRef.current.getAzimuthalAngle())
-                }
+                onEnd={() => {
+                    if (controlRef.current) {
+                        setRotationState(controlRef.current.getAzimuthalAngle());
+                    }
+                }}
             />
 
             <group

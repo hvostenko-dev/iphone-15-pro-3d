@@ -2,69 +2,76 @@ import { Environment, Lightformer } from "@react-three/drei";
 
 const Lights = () => {
     return (
-        // group different lights and lightformers. We can use group to organize lights, cameras, meshes, and other objects in the scene.
         <group name="lights">
             {/**
-             * @description Environment is used to create a background environment for the scene
-             * https://github.com/pmndrs/drei?tab=readme-ov-file#environment
+             * Environment with frames={1} only generates the environment map once,
+             * preventing continuous heavy FBO rerenders on every single frame.
              */}
-            <Environment resolution={256}>
+            <Environment resolution={256} frames={1}>
                 <group>
-                    {/**
-                     * @description Lightformer used to create custom lights with various shapes and properties in a 3D scene.
-                     * https://github.com/pmndrs/drei?tab=readme-ov-file#lightformer
-                     */}
                     <Lightformer
                         form="rect"
-                        intensity={10}
+                        intensity={8}
                         position={[-1, 0, -10]}
                         scale={10}
                         color={"#495057"}
                     />
                     <Lightformer
                         form="rect"
-                        intensity={10}
+                        intensity={8}
                         position={[-10, 2, 1]}
                         scale={10}
                         rotation-y={Math.PI / 2}
                     />
                     <Lightformer
                         form="rect"
-                        intensity={10}
+                        intensity={8}
                         position={[10, 0, 1]}
                         scale={10}
                         rotation-y={Math.PI / 2}
                     />
+                    <Lightformer
+                        form="ring"
+                        intensity={4}
+                        position={[0, 10, -2]}
+                        scale={8}
+                        target={[0, 0, 0]}
+                    />
                 </group>
             </Environment>
 
-            {/**
-             * @description spotLight is used to create a light source positioned at a specific point
-             * in the scene that emits light in a specific direction.
-             * https://threejs.org/docs/#api/en/lights/SpotLight
-             */}
             <spotLight
                 position={[-2, 10, 5]}
-                angle={0.15}
-                penumbra={1} // the penumbra is the soft edge of a shadow cast by a point light
-                decay={0} // the amount the light dims as it moves away from the source
-                intensity={Math.PI * 0.2} // the light intensity
+                angle={0.18}
+                penumbra={1}
+                decay={0}
+                intensity={Math.PI * 0.25}
                 color={"#f8f9fa"}
             />
             <spotLight
                 position={[0, -25, 10]}
-                angle={0.15}
+                angle={0.18}
                 penumbra={1}
                 decay={0}
-                intensity={Math.PI * 0.2}
+                intensity={Math.PI * 0.25}
                 color={"#f8f9fa"}
             />
             <spotLight
                 position={[0, 15, 5]}
-                angle={0.15}
+                angle={0.18}
                 penumbra={1}
                 decay={0.1}
-                intensity={Math.PI * 3}
+                intensity={Math.PI * 2.8}
+            />
+            <directionalLight
+                position={[5, 5, 5]}
+                intensity={0.6}
+                color="#ffffff"
+            />
+            <directionalLight
+                position={[-5, -5, -2]}
+                intensity={0.4}
+                color="#8F8A81"
             />
         </group>
     );
