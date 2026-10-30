@@ -411,7 +411,7 @@ const Model = () => {
                                     sounds.playClick();
                                     setShowBuyModal(true);
                                 }}
-                                className="px-5 py-2.5 rounded-full bg-blue hover:bg-blue/90 text-white text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(41,151,255,0.4)]"
+                                className="px-7 py-3 rounded-full bg-white text-black hover:bg-neutral-200 text-sm sm:text-base font-semibold transition-all hover:scale-105 active:scale-95 shadow-[0_4px_25px_rgba(255,255,255,0.2)]"
                             >
                                 Configure & Buy
                             </button>
@@ -534,7 +534,7 @@ const Model = () => {
                                             sounds.playShutter();
                                             setOrderSuccess(true);
                                         }}
-                                        className="w-full py-3.5 rounded-2xl bg-blue hover:bg-blue/90 text-white font-semibold text-base transition-all shadow-[0_5px_25px_rgba(41,151,255,0.4)] active:scale-95"
+                                        className="w-full py-4 rounded-2xl bg-white text-black hover:bg-neutral-200 font-semibold text-base transition-all shadow-[0_4px_25px_rgba(255,255,255,0.25)] active:scale-95"
                                     >
                                         Pay with Apple Pay
                                     </button>

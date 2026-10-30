@@ -145,7 +145,7 @@ const Navbar = () => {
                     <a
                         href="#model"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="w-full py-2.5 rounded-full bg-blue text-white text-center text-sm font-semibold shadow-lg shadow-blue/30"
+                        className="w-full py-3.5 rounded-full bg-white text-black hover:bg-neutral-200 text-center text-sm font-semibold shadow-lg transition-all"
                     >
                         Buy iPhone 15 Pro
                     </a>

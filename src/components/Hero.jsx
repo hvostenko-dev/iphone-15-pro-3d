@@ -2,6 +2,7 @@ import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { heroVideo, smallHeroVideo } from '../utils';
 import { useEffect, useRef, useState } from 'react';
+import { sounds } from '../utils/audio';
 
 const Hero = () => {
     const [videoSrc, setVideoSrc] = useState(
@@ -35,7 +36,7 @@ const Hero = () => {
                     }
                 }
             },
-            { threshold: 0.2 }
+            { threshold: 0.15 }
         );
 
         if (sectionRef.current) {
@@ -46,40 +47,41 @@ const Hero = () => {
     }, [videoSrc]);
 
     useGSAP(() => {
-        gsap.to('#hero-badge', { opacity: 1, y: 0, delay: 0.8, duration: 1, ease: 'power2.out' });
-        gsap.to('#hero', { opacity: 1, y: 0, delay: 1.2, duration: 1, ease: 'power2.out' });
-        gsap.to('#cta', { opacity: 1, y: 0, delay: 1.8, duration: 1, ease: 'power2.out' });
+        gsap.to('#hero-badge', { opacity: 1, y: 0, delay: 0.6, duration: 1, ease: 'power2.out' });
+        gsap.to('#hero', { opacity: 1, y: 0, delay: 1.0, duration: 1, ease: 'power2.out' });
+        gsap.to('#cta', { opacity: 1, y: 0, delay: 1.6, duration: 1, ease: 'power2.out' });
     }, []);
 
     return (
         <section
             ref={sectionRef}
-            className="w-full nav-height bg-black relative flex flex-col justify-between py-6 sm:py-10 overflow-hidden"
+            className="w-full min-h-[92svh] sm:min-h-[95svh] bg-black relative flex flex-col justify-between items-center pt-8 sm:pt-12 pb-8 sm:pb-12 overflow-hidden select-none"
         >
-            {/* Ambient Radial Spotlight */}
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-blue/10 rounded-full blur-[120px] pointer-events-none" />
-
-            <div className="flex-1 w-full flex-center flex-col px-4 z-10">
+            {/* Top Typography & Badge */}
+            <div className="w-full flex-center flex-col px-4 z-10 text-center">
                 <div
                     id="hero-badge"
-                    className="opacity-0 translate-y-6 mb-3 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
+                    className="opacity-0 translate-y-6 mb-3 sm:mb-4 px-4 sm:px-5 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
                 >
-                    <span className="text-xs font-medium tracking-widest uppercase bg-gradient-to-r from-amber-200 via-white to-gray-300 bg-clip-text text-transparent">
-                        Titanium · So strong · So light · So Pro
+                    <span className="text-xs sm:text-sm font-medium tracking-widest uppercase text-gray-200">
+                        Titanium · So strong. So light. So Pro.
                     </span>
                 </div>
 
                 <h1
                     id="hero"
-                    className="hero-title opacity-0 translate-y-8 bg-gradient-to-b from-white via-white/90 to-gray-400 bg-clip-text text-transparent text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight"
+                    className="opacity-0 translate-y-8 bg-gradient-to-b from-white via-white/95 to-gray-400 bg-clip-text text-transparent text-5xl sm:text-7xl md:text-8xl font-semibold tracking-tight"
                 >
                     iPhone 15 Pro
                 </h1>
+            </div>
 
-                <div className="md:w-10/12 w-11/12 sm:w-9/12 max-w-4xl flex-center mt-2 sm:mt-4">
+            {/* Massive iPhone Video Showcase (Centered & Grand Scale) */}
+            <div className="w-full max-w-6xl flex-center flex-1 my-3 sm:my-6 px-2 sm:px-6">
+                <div className="w-full flex-center">
                     <video
                         ref={videoRef}
-                        className="pointer-events-none w-full max-h-[52svh] sm:max-h-[62svh] object-contain drop-shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
+                        className="pointer-events-none w-full max-h-[62vh] sm:max-h-[70vh] md:max-h-[75vh] object-contain drop-shadow-[0_25px_50px_rgba(0,0,0,0.95)]"
                         autoPlay
                         muted
                         playsInline={true}
@@ -90,29 +92,37 @@ const Hero = () => {
                 </div>
             </div>
 
+            {/* Premium Apple-Style Action Buttons & Pricing */}
             <div
                 id="cta"
-                className="flex flex-col items-center opacity-0 translate-y-10 pb-4 sm:pb-6 px-4 z-10 gap-3"
+                className="w-full flex flex-col items-center opacity-0 translate-y-8 px-4 z-10 gap-4"
             >
-                <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-md">
                     <a
                         href="#model"
-                        className="px-8 py-3 rounded-full bg-blue hover:bg-blue/90 text-white font-medium text-sm transition-all shadow-[0_4px_25px_rgba(41,151,255,0.4)] hover:scale-105 active:scale-95"
+                        onClick={() => sounds.playClick()}
+                        className="w-full sm:w-auto text-center px-10 py-3.5 sm:py-4 rounded-full bg-white text-black font-semibold text-base sm:text-lg hover:bg-neutral-200 transition-all duration-300 shadow-[0_4px_30px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 cursor-pointer"
                     >
                         Buy Now
                     </a>
                     <a
                         href="#model"
-                        className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium text-sm border border-white/15 backdrop-blur-md transition-all hover:scale-105 active:scale-95 flex items-center gap-2"
+                        onClick={() => sounds.playClick()}
+                        className="w-full sm:w-auto text-center px-8 py-3.5 sm:py-4 rounded-full bg-neutral-900/90 text-white font-semibold text-base sm:text-lg border border-white/20 hover:border-white/40 hover:bg-neutral-800 transition-all duration-300 hover:scale-105 active:scale-95 backdrop-blur-xl cursor-pointer flex items-center justify-center gap-2"
                     >
-                        <span>View 3D Model</span>
-                        <span className="text-xs">↗</span>
+                        <span>Explore 3D</span>
+                        <span className="text-gray-400 text-sm">↗</span>
                     </a>
                 </div>
 
-                <p className="font-normal text-xs sm:text-sm text-gray-100 text-center tracking-wide">
-                    From $199/month or $999 · Trade-in eligible
-                </p>
+                <div className="text-center space-y-1">
+                    <p className="font-medium text-sm sm:text-base text-gray-300 tracking-wide">
+                        From $999 or $41.62/mo. for 24 mo.
+                    </p>
+                    <p className="text-xs text-gray-400">
+                        Get $180–$650 in credit when you trade in iPhone 11 or higher.
+                    </p>
+                </div>
             </div>
         </section>
     );

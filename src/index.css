@@ -30,9 +30,9 @@ html {
 
 body {
   color: white;
-  width: 100dvw;
+  width: 100%;
+  min-height: 100%;
   overflow-x: hidden;
-  height: 100%;
   background: #000;
   border-color: #3b3b3b;
   user-select: none;
@@ -71,7 +71,7 @@ body {
   }
 
   .btn {
-    @apply px-6 py-2.5 rounded-3xl bg-blue my-4 sm:my-5 hover:bg-transparent border border-transparent hover:border hover:text-blue hover:border-blue transition-all duration-300 font-medium;
+    @apply px-8 py-3.5 rounded-full bg-white text-black font-semibold text-base hover:bg-neutral-200 transition-all duration-300 shadow-md hover:scale-105 active:scale-95 inline-flex items-center justify-center;
   }
 
   .color-container {
