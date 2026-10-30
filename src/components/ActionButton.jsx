@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { animateWithGsap } from "../utils/animations";
+import { sounds } from "../utils/audio";
 
 const actionModes = [
     {
@@ -69,6 +70,7 @@ const ActionButtonSection = () => {
     }, []);
 
     const handlePressButton = (mode) => {
+        sounds.playHapticAction();
         setActiveMode(mode);
         setIsTriggered(true);
         setTimeout(() => setIsTriggered(false), 2400);

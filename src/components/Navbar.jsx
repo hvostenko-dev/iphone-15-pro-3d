@@ -1,18 +1,22 @@
 import { useState, useEffect } from 'react';
 import { appleImg, bagImg, searchImg } from '../utils';
+import { sounds } from '../utils/audio';
 
 const navItems = [
     { label: 'Highlights', href: '#highlights' },
     { label: '3D Studio', href: '#model' },
+    { label: 'Cameras', href: '#camera-studio' },
     { label: 'Action Button', href: '#action-button' },
     { label: 'Titanium', href: '#features' },
     { label: 'Specs', href: '#specs' },
+    { label: 'Compare', href: '#compare' },
     { label: 'A17 Pro', href: '#how-it-works' },
 ];
 
 const Navbar = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const [isMuted, setIsMuted] = useState(sounds.isMuted);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -27,8 +31,13 @@ const Navbar = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const handleToggleMute = () => {
+        const muted = sounds.toggleMute();
+        setIsMuted(muted);
+    };
+
     return (
-        <header className="w-full py-4 sm:py-4 sm:px-10 px-5 flex justify-between items-center sticky top-0 z-50 bg-black/75 backdrop-blur-xl border-b border-white/10 transition-all">
+        <header className="w-full py-3.5 sm:py-4 sm:px-10 px-5 flex justify-between items-center sticky top-0 z-50 bg-black/75 backdrop-blur-xl border-b border-white/10 transition-all">
             {/* Ambient Top Scroll Progress Bar */}
             <div
                 className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-blue via-cyan-400 to-indigo-500 transition-all duration-150"
@@ -45,7 +54,7 @@ const Navbar = () => {
                 </a>
 
                 {/* Desktop Nav Items */}
-                <div className="flex flex-1 justify-center max-md:hidden gap-8">
+                <div className="flex flex-1 justify-center max-lg:hidden gap-6 xl:gap-8">
                     {navItems.map((item) => (
                         <a
                             key={item.label}
@@ -58,7 +67,22 @@ const Navbar = () => {
                 </div>
 
                 {/* Right utility buttons */}
-                <div className="flex items-center gap-5 sm:gap-6 max-md:justify-end">
+                <div className="flex items-center gap-4 sm:gap-6 max-lg:justify-end">
+                    {/* Apple Haptic Sound Toggle */}
+                    <button
+                        type="button"
+                        onClick={handleToggleMute}
+                        title={isMuted ? "Enable sound effects" : "Mute sound effects"}
+                        className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border flex items-center gap-1.5 transition-all ${
+                            !isMuted
+                                ? "bg-blue/15 border-blue/40 text-blue shadow-[0_0_12px_rgba(41,151,255,0.25)]"
+                                : "bg-white/5 border-white/10 text-gray hover:text-white"
+                        }`}
+                    >
+                        <span>{!isMuted ? "🔊" : "🔇"}</span>
+                        <span className="hidden sm:inline">{!isMuted ? "Sound On" : "Muted"}</span>
+                    </button>
+
                     <a
                         href="#highlights"
                         aria-label="Search"
@@ -80,7 +104,7 @@ const Navbar = () => {
                         aria-label="Toggle Menu"
                         aria-expanded={mobileMenuOpen}
                         onClick={() => setMobileMenuOpen((prev) => !prev)}
-                        className="md:hidden flex flex-col justify-center items-center w-8 h-8 rounded-full hover:bg-white/10 transition-colors"
+                        className="lg:hidden flex flex-col justify-center items-center w-8 h-8 rounded-full hover:bg-white/10 transition-colors"
                     >
                         <span
                             className={`block w-4 h-0.5 bg-white rounded-full transition-all duration-300 ${
@@ -98,11 +122,11 @@ const Navbar = () => {
 
             {/* Mobile Dropdown Menu */}
             {mobileMenuOpen && (
-                <div className="md:hidden absolute top-full left-0 w-full bg-zinc/95 backdrop-blur-2xl border-b border-white/10 px-6 py-6 flex flex-col gap-4 shadow-2xl animate-fadeIn">
+                <div className="lg:hidden absolute top-full left-0 w-full bg-zinc/95 backdrop-blur-2xl border-b border-white/10 px-6 py-6 flex flex-col gap-4 shadow-2xl animate-fadeIn max-h-[85vh] overflow-y-auto">
                     <p className="text-[11px] uppercase tracking-widest text-gray font-semibold">
                         Explore iPhone 15 Pro
                     </p>
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2.5">
                         {navItems.map((item) => (
                             <a
                                 key={item.label}

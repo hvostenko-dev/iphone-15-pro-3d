@@ -16,6 +16,7 @@ const ModelView = ({
     isMobile = false,
     interactive = true,
     autoRotate = false,
+    mood = "studio",
 }) => {
     const modelScale =
         index === 1
@@ -38,7 +39,7 @@ const ModelView = ({
 
             <PerspectiveCamera makeDefault position={[0, 0, 4]} fov={isMobile ? 55 : 45} />
 
-            <Lights />
+            <Lights mood={mood} />
 
             <OrbitControls
                 makeDefault

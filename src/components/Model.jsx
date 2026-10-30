@@ -9,6 +9,7 @@ import { Canvas } from "@react-three/fiber";
 import { View } from "@react-three/drei";
 import { models, sizes } from "../constants";
 import { animateWithGsap, animateWithGsapTimeline } from "../utils/animations";
+import { sounds } from "../utils/audio";
 
 const sizeSpecs = {
     small: {
@@ -33,6 +34,39 @@ const sizeSpecs = {
     },
 };
 
+const inspectionHotspots = [
+    {
+        id: "overview",
+        label: "Overview",
+        angle: 0,
+        tip: "Drag in any direction to explore 360° geometry.",
+    },
+    {
+        id: "camera",
+        label: "Cameras",
+        angle: Math.PI,
+        tip: "Triple camera system with 48MP Quad-Pixel and 5x optical telephoto.",
+    },
+    {
+        id: "action",
+        label: "Action Button",
+        angle: -Math.PI / 2,
+        tip: "Customizable haptic Action button replaces the single-use switch.",
+    },
+    {
+        id: "titanium",
+        label: "Titanium Edge",
+        angle: Math.PI / 2,
+        tip: "Grade 5 Titanium with delicate satin brushed finish and contoured borders.",
+    },
+];
+
+const lightingMoods = [
+    { id: "studio", name: "Studio White", color: "#ffffff" },
+    { id: "neon", name: "Cyber Neon", color: "#38bdf8" },
+    { id: "sunset", name: "Sunset Gold", color: "#f97316" },
+];
+
 const Model = () => {
     const [size, setSize] = useState("small");
     const [model, setModel] = useState({
@@ -45,6 +79,8 @@ const Model = () => {
     );
     const [interactive3D, setInteractive3D] = useState(true);
     const [autoRotate, setAutoRotate] = useState(false);
+    const [lightMood, setLightMood] = useState("studio");
+    const [activeHotspot, setActiveHotspot] = useState("overview");
     const [isSectionInView, setIsSectionInView] = useState(true);
     const [showBuyModal, setShowBuyModal] = useState(false);
     const [selectedStorage, setSelectedStorage] = useState("256GB");
@@ -97,19 +133,21 @@ const Model = () => {
         if (size === "large") {
             animateWithGsapTimeline(tl, small, smallRotation, "#view1", "#view2", {
                 transform: "translateX(-100%)",
-                duration: 1.5,
+                duration: 1.4,
             });
         }
 
         if (size === "small") {
             animateWithGsapTimeline(tl, large, largeRotation, "#view2", "#view1", {
                 transform: "translateX(0)",
-                duration: 1.5,
+                duration: 1.4,
             });
         }
     }, [size, smallRotation, largeRotation]);
 
-    const handleAnglePreset = (angleRadian) => {
+    const handleAnglePreset = (spot) => {
+        sounds.playClick();
+        setActiveHotspot(spot.id);
         setAutoRotate(false);
         const targetRef = size === "small" ? small : large;
         const targetControl = size === "small" ? cameraControlSmall : cameraControlLarge;
@@ -118,12 +156,12 @@ const Model = () => {
             targetControl.current.reset();
         }
         gsap.to(targetRef.current.rotation, {
-            y: angleRadian,
+            y: spot.angle,
             duration: 0.9,
             ease: "power2.out",
         });
-        if (size === "small") setSmallRotation(angleRadian);
-        else setLargeRotation(angleRadian);
+        if (size === "small") setSmallRotation(spot.angle);
+        else setLargeRotation(spot.angle);
     };
 
     useGSAP(() => {
@@ -132,6 +170,10 @@ const Model = () => {
     }, []);
 
     const currentSpecs = useMemo(() => sizeSpecs[size], [size]);
+    const currentSpot = useMemo(
+        () => inspectionHotspots.find((s) => s.id === activeHotspot) || inspectionHotspots[0],
+        [activeHotspot]
+    );
 
     return (
         <section id="model" ref={sectionRef} className="common-padding relative">
@@ -147,17 +189,17 @@ const Model = () => {
 
                 <div className="flex flex-col items-center mt-3">
                     {/* 3D Canvas Container */}
-                    <div className="w-full h-[60vh] sm:h-[75vh] md:h-[82vh] overflow-hidden relative rounded-3xl bg-gradient-to-b from-zinc/80 to-black/90 border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.8)] backdrop-blur-sm">
+                    <div className="w-full h-[62vh] sm:h-[75vh] md:h-[82vh] overflow-hidden relative rounded-3xl bg-gradient-to-b from-zinc/80 to-black/95 border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-md">
                         
                         {/* Dynamic Titanium Ambient Glow */}
                         <div
-                            className="absolute inset-0 pointer-events-none transition-all duration-700 opacity-40 blur-3xl"
+                            className="absolute inset-0 pointer-events-none transition-all duration-700 opacity-45 blur-3xl"
                             style={{
                                 background: `radial-gradient(circle at 50% 50%, ${model.color[0]} 0%, transparent 70%)`,
                             }}
                         />
 
-                        {/* Interactive Top Toolbar */}
+                        {/* Top Toolbar: Angle Presets & Auto Spin */}
                         <div className="absolute top-4 left-0 right-0 z-20 flex flex-wrap justify-center items-center gap-2 px-4 pointer-events-none">
                             <span className="text-xs text-white/90 bg-zinc/90 backdrop-blur-md border border-white/15 px-3.5 py-1.5 rounded-full shadow-lg">
                                 {interactive3D ? (autoRotate ? "Auto-spinning 360°" : "Drag to rotate 360°") : "Scroll mode"}
@@ -165,39 +207,33 @@ const Model = () => {
 
                             <button
                                 type="button"
-                                onClick={() => setAutoRotate((prev) => !prev)}
+                                onClick={() => {
+                                    sounds.playClick();
+                                    setAutoRotate((prev) => !prev);
+                                }}
                                 className={`pointer-events-auto text-xs px-3.5 py-1.5 rounded-full border transition-all shadow-lg ${
                                     autoRotate
-                                        ? "bg-blue text-white border-blue shadow-blue/30"
+                                        ? "bg-blue text-white border-blue shadow-blue/30 scale-105"
                                         : "bg-zinc/90 text-white/80 hover:text-white border-white/15"
                                 }`}
                             >
                                 {autoRotate ? "Pause Spin" : "Auto Spin"}
                             </button>
 
-                            <button
-                                type="button"
-                                onClick={() => handleAnglePreset(0)}
-                                className="pointer-events-auto text-xs text-white/80 hover:text-white bg-zinc/90 backdrop-blur-md border border-white/15 px-3.5 py-1.5 rounded-full transition-all hover:bg-white/10 shadow-lg"
-                            >
-                                Front
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => handleAnglePreset(Math.PI)}
-                                className="pointer-events-auto text-xs text-white/80 hover:text-white bg-zinc/90 backdrop-blur-md border border-white/15 px-3.5 py-1.5 rounded-full transition-all hover:bg-white/10 shadow-lg"
-                            >
-                                Back
-                            </button>
-
-                            <button
-                                type="button"
-                                onClick={() => handleAnglePreset(Math.PI / 2)}
-                                className="pointer-events-auto text-xs text-white/80 hover:text-white bg-zinc/90 backdrop-blur-md border border-white/15 px-3.5 py-1.5 rounded-full transition-all hover:bg-white/10 shadow-lg"
-                            >
-                                Profile
-                            </button>
+                            {inspectionHotspots.map((spot) => (
+                                <button
+                                    key={spot.id}
+                                    type="button"
+                                    onClick={() => handleAnglePreset(spot)}
+                                    className={`pointer-events-auto text-xs px-3 py-1.5 rounded-full border transition-all shadow-lg ${
+                                        activeHotspot === spot.id
+                                            ? "bg-white text-black border-white font-semibold scale-105"
+                                            : "bg-zinc/90 text-white/80 hover:text-white border-white/15 hover:bg-white/10"
+                                    }`}
+                                >
+                                    {spot.label}
+                                </button>
+                            ))}
 
                             {isMobile && (
                                 <button
@@ -208,6 +244,27 @@ const Model = () => {
                                     {interactive3D ? "Lock Scroll" : "Touch 3D"}
                                 </button>
                             )}
+                        </div>
+
+                        {/* Studio Lighting Mood Switcher in Top Right */}
+                        <div className="absolute top-16 sm:top-4 right-4 z-20 hidden sm:flex items-center gap-1.5 bg-black/60 backdrop-blur-md border border-white/10 p-1 rounded-full">
+                            {lightingMoods.map((lm) => (
+                                <button
+                                    key={lm.id}
+                                    type="button"
+                                    onClick={() => {
+                                        sounds.playSwitch();
+                                        setLightMood(lm.id);
+                                    }}
+                                    title={lm.name}
+                                    className={`w-6 h-6 rounded-full flex-center transition-all ${
+                                        lightMood === lm.id
+                                            ? "ring-2 ring-white scale-110"
+                                            : "opacity-60 hover:opacity-100"
+                                    }`}
+                                    style={{ backgroundColor: lm.color }}
+                                />
+                            ))}
                         </div>
 
                         {/* Model Views */}
@@ -222,6 +279,7 @@ const Model = () => {
                             isMobile={isMobile}
                             interactive={interactive3D}
                             autoRotate={autoRotate && size === "small"}
+                            mood={lightMood}
                         />
 
                         <ModelView
@@ -235,6 +293,7 @@ const Model = () => {
                             isMobile={isMobile}
                             interactive={interactive3D}
                             autoRotate={autoRotate && size === "large"}
+                            mood={lightMood}
                         />
 
                         <Canvas
@@ -262,15 +321,23 @@ const Model = () => {
                             <View.Port />
                         </Canvas>
 
-                        {/* Titanium Finish Badge in Bottom Left */}
-                        <div className="absolute bottom-4 left-4 z-20 hidden sm:flex items-center gap-2.5 bg-black/60 backdrop-blur-md border border-white/10 px-4 py-2 rounded-2xl">
-                            <span
-                                className="w-3.5 h-3.5 rounded-full border border-white/30 shadow-inner"
-                                style={{ backgroundColor: model.color[0] }}
-                            />
-                            <span className="text-xs font-medium text-white/90">
-                                Grade 5 Titanium Finish
-                            </span>
+                        {/* Interactive Feature Tip Pill at Bottom */}
+                        <div className="absolute bottom-4 left-4 right-4 z-20 flex justify-between items-center pointer-events-none">
+                            <div className="bg-black/75 backdrop-blur-md border border-white/10 px-4 py-2 rounded-2xl flex items-center gap-2.5">
+                                <span
+                                    className="w-3.5 h-3.5 rounded-full border border-white/30 shadow-inner"
+                                    style={{ backgroundColor: model.color[0] }}
+                                />
+                                <span className="text-xs font-medium text-white/90">
+                                    Grade 5 Titanium · {model.title.replace("iPhone 15 Pro in ", "")}
+                                </span>
+                            </div>
+
+                            <div className="hidden md:flex bg-black/75 backdrop-blur-md border border-white/10 px-4 py-2 rounded-2xl max-w-sm">
+                                <p className="text-xs text-gray-200">
+                                    💡 {currentSpot.tip}
+                                </p>
+                            </div>
                         </div>
                     </div>
 
@@ -297,9 +364,13 @@ const Model = () => {
                                                     : "opacity-75 hover:opacity-100 hover:scale-105"
                                             }`}
                                             style={{ backgroundColor: item.color[0] }}
-                                            onClick={() => setModel(item)}
+                                            onClick={() => {
+                                                sounds.playClick();
+                                                setModel(item);
+                                            }}
                                             onKeyDown={(e) => {
                                                 if (e.key === "Enter" || e.key === " ") {
+                                                    sounds.playClick();
                                                     setModel(item);
                                                 }
                                             }}
@@ -323,7 +394,10 @@ const Model = () => {
                                                 ? "bg-white text-black shadow-md scale-105"
                                                 : "bg-transparent text-white/80 hover:text-white"
                                         }`}
-                                        onClick={() => setSize(value)}
+                                        onClick={() => {
+                                            sounds.playClick();
+                                            setSize(value);
+                                        }}
                                     >
                                         {label}
                                     </button>
@@ -333,7 +407,10 @@ const Model = () => {
                             {/* Order / Configure Button */}
                             <button
                                 type="button"
-                                onClick={() => setShowBuyModal(true)}
+                                onClick={() => {
+                                    sounds.playClick();
+                                    setShowBuyModal(true);
+                                }}
                                 className="px-5 py-2.5 rounded-full bg-blue hover:bg-blue/90 text-white text-sm font-semibold transition-all hover:scale-105 active:scale-95 shadow-[0_4px_20px_rgba(41,151,255,0.4)]"
                             >
                                 Configure & Buy
@@ -371,6 +448,7 @@ const Model = () => {
                         <button
                             type="button"
                             onClick={() => {
+                                sounds.playClick();
                                 setShowBuyModal(false);
                                 setOrderSuccess(false);
                             }}
@@ -404,7 +482,10 @@ const Model = () => {
                                                 <button
                                                     key={cap}
                                                     type="button"
-                                                    onClick={() => setSelectedStorage(cap)}
+                                                    onClick={() => {
+                                                        sounds.playClick();
+                                                        setSelectedStorage(cap);
+                                                    }}
                                                     className={`py-2.5 rounded-xl text-sm font-semibold border transition-all ${
                                                         selectedStorage === cap
                                                             ? "bg-white text-black border-white shadow-lg"
@@ -449,7 +530,10 @@ const Model = () => {
                                     {/* Action Button */}
                                     <button
                                         type="button"
-                                        onClick={() => setOrderSuccess(true)}
+                                        onClick={() => {
+                                            sounds.playShutter();
+                                            setOrderSuccess(true);
+                                        }}
                                         className="w-full py-3.5 rounded-2xl bg-blue hover:bg-blue/90 text-white font-semibold text-base transition-all shadow-[0_5px_25px_rgba(41,151,255,0.4)] active:scale-95"
                                     >
                                         Pay with Apple Pay
@@ -468,6 +552,7 @@ const Model = () => {
                                 <button
                                     type="button"
                                     onClick={() => {
+                                        sounds.playClick();
                                         setShowBuyModal(false);
                                         setOrderSuccess(false);
                                     }}

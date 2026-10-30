@@ -1,12 +1,31 @@
 import { Environment, Lightformer } from "@react-three/drei";
 
-const Lights = () => {
+const moodPresets = {
+    studio: {
+        envColor: "#495057",
+        dirColor: "#ffffff",
+        spotColor: "#f8f9fa",
+        accentColor: "#8F8A81",
+    },
+    neon: {
+        envColor: "#1d4ed8",
+        dirColor: "#38bdf8",
+        spotColor: "#818cf8",
+        accentColor: "#a855f7",
+    },
+    sunset: {
+        envColor: "#7c2d12",
+        dirColor: "#fbbf24",
+        spotColor: "#f97316",
+        accentColor: "#ea580c",
+    },
+};
+
+const Lights = ({ mood = "studio" }) => {
+    const config = moodPresets[mood] || moodPresets.studio;
+
     return (
         <group name="lights">
-            {/**
-             * Environment with frames={1} only generates the environment map once,
-             * preventing continuous heavy FBO rerenders on every single frame.
-             */}
             <Environment resolution={256} frames={1}>
                 <group>
                     <Lightformer
@@ -14,7 +33,7 @@ const Lights = () => {
                         intensity={8}
                         position={[-1, 0, -10]}
                         scale={10}
-                        color={"#495057"}
+                        color={config.envColor}
                     />
                     <Lightformer
                         form="rect"
@@ -46,7 +65,7 @@ const Lights = () => {
                 penumbra={1}
                 decay={0}
                 intensity={Math.PI * 0.25}
-                color={"#f8f9fa"}
+                color={config.spotColor}
             />
             <spotLight
                 position={[0, -25, 10]}
@@ -54,7 +73,7 @@ const Lights = () => {
                 penumbra={1}
                 decay={0}
                 intensity={Math.PI * 0.25}
-                color={"#f8f9fa"}
+                color={config.spotColor}
             />
             <spotLight
                 position={[0, 15, 5]}
@@ -66,12 +85,12 @@ const Lights = () => {
             <directionalLight
                 position={[5, 5, 5]}
                 intensity={0.6}
-                color="#ffffff"
+                color={config.dirColor}
             />
             <directionalLight
                 position={[-5, -5, -2]}
                 intensity={0.4}
-                color="#8F8A81"
+                color={config.accentColor}
             />
         </group>
     );

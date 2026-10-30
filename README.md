@@ -1,6 +1,6 @@
 # 📱 Apple iPhone 15 Pro Showcase (3D & WebGL)
 
-A production-grade, highly-optimized interactive landing page recreating the Apple iPhone 15 Pro announcement experience. Built with React 19, Three.js, React Three Fiber, and GSAP, this project showcases high-fidelity 3D model interaction, GPU-optimized rendering, scroll-bound cinematography, full mobile responsiveness, and rich Apple-grade styling.
+A production-grade, highly-optimized interactive landing page recreating the Apple iPhone 15 Pro announcement experience. Built with React 19, Three.js, React Three Fiber, Web Audio API, and GSAP, this project showcases high-fidelity 3D model interaction, GPU-optimized rendering, scroll-bound cinematography, full mobile responsiveness, and rich Apple-grade styling.
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Three.js](https://img.shields.io/badge/Three.js-000000?style=for-the-badge&logo=three.js&logoColor=white)
@@ -23,13 +23,22 @@ A production-grade, highly-optimized interactive landing page recreating the App
 
 ## 🎯 Key Features & Visual Highlights
 
-- **Interactive 3D Studio:**
+- **Interactive 3D Studio & Hotspot Inspection:**
   - 360° orbital rotation with cinematic inertia damping (`dampingFactor={0.06}`).
-  - Angle presets: **Front**, **Back**, **Profile**, and **Auto-Spin 360°** mode.
+  - **Inspection Hotspots:** Instant smooth angle focus on **Cameras (48MP)**, **Action Button**, **Titanium Edge**, and **Overview**.
+  - **Studio Lighting Moods:** Switch in real time between *Studio White*, *Cyber Neon*, and *Sunset Gold* lighting schemes.
+  - **Auto-Spin 360°** mode for hands-free showcase presentation.
   - Dynamic **Titanium Ambient Glow** that adapts its radial neon hue to match the active finish in real time.
   - Live specifications comparison matrix between `6.1"` iPhone 15 Pro and `6.7"` iPhone 15 Pro Max (weight, display, optical zoom, and pricing).
   - Interactive **Apple-style Configurator & Order Modal** with storage selection (128GB - 1TB), live price calculations, Apple Card monthly estimates, and Apple Pay checkout simulation.
   - Percentage-accurate 3D asset loader powered by Drei `useProgress`.
+- **Pro Camera System Playground:**
+  - Interactive iOS Camera viewfinder with focal length switching: `0.5x` (13mm Ultra Wide), `1x` (24mm, 28mm, 35mm), `2x` (48mm), and `5x` (120mm Telephoto).
+  - Rule of thirds 3x3 grid toggle, simulated shutter release flash, and photo capture counter.
+- **Tactile Web Audio API Sound Effects:**
+  - Built-in zero-latency Apple-style audio synthesis for clicks, shutter releases, and Action button haptic buzzes without external MP3 files. Includes global mute/unmute control in the navbar.
+- **Side-by-Side Model Comparison:**
+  - Interactive comparison matrix between iPhone 15 Pro, iPhone 15 Pro Max, and iPhone 14 Pro with dynamic feature upgrade highlighting.
 - **Interactive Action Button Playground:**
   - Test the new Action Button with simulated Dynamic Island animations and haptic status indicators (Silent Mode, Camera, Flashlight, Focus, Voice Memo, Translate).
 - **Engineering & Tech Specs Grid:**
@@ -46,6 +55,7 @@ A production-grade, highly-optimized interactive landing page recreating the App
 - **Core Framework:** [React 19](https://react.dev/)
 - **Build Tool:** [Vite 8](https://vite.dev/)
 - **3D Engine:** [Three.js](https://threejs.org/) via [@react-three/fiber](https://docs.pmnd.rs/react-three-fiber) and [@react-three/drei](https://github.com/pmndrs/drei)
+- **Audio:** Custom Web Audio API Synthesizer
 - **Animation:** [GSAP (GreenSock)](https://gsap.com/) & ScrollTrigger
 - **Styling:** [Tailwind CSS](https://tailwindcss.com/)
 - **Monitoring:** [@sentry/react](https://sentry.io/)
