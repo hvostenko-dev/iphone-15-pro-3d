@@ -3,15 +3,15 @@ import * as THREE from "three";
 import Lights from "./Lights";
 import Loader from "./Loader";
 import IPhone from "./IPhone";
-import { Suspense, useEffect } from "react";
-import gsap from "gsap";
+import { Suspense, useMemo } from "react";
+
+const TARGET_ORIGIN = new THREE.Vector3(0, 0, 0);
 
 const ModelView = ({
     index,
     groupRef,
     gsapType,
     controlRef,
-    setRotationState,
     size,
     item,
     isMobile = false,
@@ -19,29 +19,12 @@ const ModelView = ({
     autoRotate = false,
     mood = "studio",
 }) => {
-    const modelScale =
-        index === 1
-            ? isMobile
-                ? [13, 13, 13]
-                : [15, 15, 15]
-            : isMobile
-              ? [15, 15, 15]
-              : [17, 17, 17];
-
-    useEffect(() => {
-        if (groupRef.current) {
-            gsap.fromTo(
-                groupRef.current.position,
-                { y: -0.4 },
-                { y: 0, duration: 1.2, ease: "power2.out", delay: 0.1 }
-            );
-            gsap.fromTo(
-                groupRef.current.rotation,
-                { y: 0.2 },
-                { y: 0, duration: 1.4, ease: "power2.out", delay: 0.1 }
-            );
+    const modelScale = useMemo(() => {
+        if (index === 1) {
+            return isMobile ? [13, 13, 13] : [15, 15, 15];
         }
-    }, [groupRef]);
+        return isMobile ? [15, 15, 15] : [17, 17, 17];
+    }, [index, isMobile]);
 
     return (
         <View
@@ -51,7 +34,7 @@ const ModelView = ({
                 !interactive ? "pointer-events-none" : "cursor-grab active:cursor-grabbing"
             }`}
         >
-            <ambientLight intensity={0.45} />
+            <ambientLight intensity={0.5} />
 
             <PerspectiveCamera makeDefault position={[0, 0, 4]} fov={isMobile ? 55 : 45} />
 
@@ -64,13 +47,13 @@ const ModelView = ({
                 enableZoom={false}
                 enablePan={false}
                 enableDamping={true}
-                dampingFactor={0.05}
-                rotateSpeed={0.5}
+                dampingFactor={0.06}
+                rotateSpeed={0.55}
                 autoRotate={autoRotate}
-                autoRotateSpeed={1.6}
-                minPolarAngle={Math.PI / 3.2}
-                maxPolarAngle={Math.PI / 1.6}
-                target={new THREE.Vector3(0, 0, 0)}
+                autoRotateSpeed={1.4}
+                minPolarAngle={Math.PI / 3.4}
+                maxPolarAngle={Math.PI / 1.55}
+                target={TARGET_ORIGIN}
             />
 
             <group

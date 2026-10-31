@@ -1,5 +1,6 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/all";
 import ModelView from "./ModelView";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { yellowImg } from "../utils";
@@ -10,6 +11,8 @@ import { View } from "@react-three/drei";
 import { models, sizes } from "../constants";
 import { animateWithGsap, animateWithGsapTimeline } from "../utils/animations";
 import { sounds } from "../utils/audio";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const sizeSpecs = {
     small: {
@@ -94,13 +97,10 @@ const Model = () => {
     const small = useRef(new THREE.Group());
     const large = useRef(new THREE.Group());
 
-    // rotation
-    const [smallRotation, setSmallRotation] = useState(0);
-    const [largeRotation, setLargeRotation] = useState(0);
-
+    const isFirstRender = useRef(true);
     const sectionRef = useRef(null);
 
-    // Warm up and pause WebGL rendering with a comfortable rootMargin so it enters buttery smooth
+    // Warm up WebGL rendering with a comfortable rootMargin so it enters buttery smooth
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -129,31 +129,48 @@ const Model = () => {
 
     // Smooth model transition between 6.1" and 6.7" Pro sizes
     useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
         const tl = gsap.timeline();
         if (size === "large") {
-            animateWithGsapTimeline(tl, small, smallRotation, "#view1", "#view2", {
-                transform: "translateX(-100%)",
-                duration: 1.1,
-            });
+            // Synchronize model rotation & camera pose before transitioning
+            if (small.current && large.current) {
+                large.current.rotation.copy(small.current.rotation);
+            }
             if (cameraControlSmall.current?.object && cameraControlLarge.current?.object) {
                 cameraControlLarge.current.object.position.copy(cameraControlSmall.current.object.position);
+                cameraControlLarge.current.object.quaternion.copy(cameraControlSmall.current.object.quaternion);
                 cameraControlLarge.current.update();
             }
+
+            animateWithGsapTimeline(tl, small, small.current.rotation.y, "#view1", "#view2", {
+                transform: "translateX(-100%)",
+                duration: 1.0,
+            });
         }
 
         if (size === "small") {
-            animateWithGsapTimeline(tl, large, largeRotation, "#view2", "#view1", {
-                transform: "translateX(0)",
-                duration: 1.1,
-            });
+            // Synchronize model rotation & camera pose before transitioning
+            if (small.current && large.current) {
+                small.current.rotation.copy(large.current.rotation);
+            }
             if (cameraControlLarge.current?.object && cameraControlSmall.current?.object) {
                 cameraControlSmall.current.object.position.copy(cameraControlLarge.current.object.position);
+                cameraControlSmall.current.object.quaternion.copy(cameraControlLarge.current.object.quaternion);
                 cameraControlSmall.current.update();
             }
+
+            animateWithGsapTimeline(tl, large, large.current.rotation.y, "#view2", "#view1", {
+                transform: "translateX(0)",
+                duration: 1.0,
+            });
         }
     }, [size]);
 
-    // Silky camera orbit to preset inspection angles without jumping or resetting
+    // Silky camera orbit to preset inspection angles along a smooth arc
     const handleAnglePreset = (spot) => {
         sounds.playClick();
         setActiveHotspot(spot.id);
@@ -161,18 +178,34 @@ const Model = () => {
         const targetControl = size === "small" ? cameraControlSmall : cameraControlLarge;
 
         if (targetControl?.current?.object) {
+            const cam = targetControl.current.object;
             const radius = 4;
-            const targetX = radius * Math.sin(spot.angle);
-            const targetZ = radius * Math.cos(spot.angle);
+            // Current horizontal angle around origin
+            const currentAngle = Math.atan2(cam.position.x, cam.position.z);
 
-            gsap.to(targetControl.current.object.position, {
-                x: targetX,
-                y: 0,
-                z: targetZ,
-                duration: 0.9,
+            // Shortest rotational delta
+            let diff = spot.angle - currentAngle;
+            while (diff < -Math.PI) diff += Math.PI * 2;
+            while (diff > Math.PI) diff -= Math.PI * 2;
+            const targetAngle = currentAngle + diff;
+
+            const animState = {
+                angle: currentAngle,
+                y: cam.position.y,
+            };
+
+            gsap.to(animState, {
+                angle: targetAngle,
+                y: 0.1,
+                duration: 1.1,
                 ease: "power2.inOut",
                 onUpdate: () => {
-                    targetControl.current.update();
+                    if (targetControl?.current?.object) {
+                        targetControl.current.object.position.x = radius * Math.sin(animState.angle);
+                        targetControl.current.object.position.z = radius * Math.cos(animState.angle);
+                        targetControl.current.object.position.y = animState.y;
+                        targetControl.current.update();
+                    }
                 },
             });
         }
@@ -181,15 +214,56 @@ const Model = () => {
     useGSAP(() => {
         animateWithGsap("#heading", { y: 0, opacity: 1 });
         animateWithGsap("#model-subheading", { y: 0, opacity: 1, delay: 0.15 });
+
+        // Smooth container fade-in without DOM translateY to keep Drei View bounds stable
         gsap.to("#model-container", {
             scrollTrigger: {
                 trigger: "#model",
                 start: "top 75%",
+                once: true,
             },
             opacity: 1,
-            y: 0,
-            duration: 1.1,
+            duration: 1.2,
             ease: "power2.out",
+        });
+
+        // Buttery smooth 3D reveal of the iPhone inside WebGL
+        ScrollTrigger.create({
+            trigger: "#model",
+            start: "top 75%",
+            once: true,
+            onEnter: () => {
+                [small.current, large.current].forEach((group) => {
+                    if (group) {
+                        // Initial reveal pose: slightly sunken, angled, and scaled
+                        group.position.set(0, -0.45, -0.1);
+                        group.rotation.set(0.06, 0.45, 0);
+                        group.scale.set(0.85, 0.85, 0.85);
+
+                        gsap.to(group.position, {
+                            y: 0,
+                            z: 0,
+                            duration: 1.6,
+                            ease: "power3.out",
+                        });
+
+                        gsap.to(group.rotation, {
+                            x: 0,
+                            y: 0,
+                            duration: 1.8,
+                            ease: "power3.out",
+                        });
+
+                        gsap.to(group.scale, {
+                            x: 1,
+                            y: 1,
+                            z: 1,
+                            duration: 1.5,
+                            ease: "power2.out",
+                        });
+                    }
+                });
+            },
         });
     }, []);
 
@@ -215,7 +289,7 @@ const Model = () => {
                     {/* 3D Canvas Container */}
                     <div
                         id="model-container"
-                        className="w-full h-[62vh] sm:h-[75vh] md:h-[82vh] overflow-hidden relative rounded-3xl bg-gradient-to-b from-white/[0.04] to-black border border-white/15 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-md opacity-0 translate-y-8"
+                        className="w-full h-[62vh] sm:h-[75vh] md:h-[82vh] overflow-hidden relative rounded-3xl bg-gradient-to-b from-white/[0.04] to-black border border-white/15 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-md opacity-0"
                     >
                         
                         {/* Dynamic Titanium Ambient Glow */}
@@ -300,7 +374,6 @@ const Model = () => {
                             groupRef={small}
                             gsapType="view1"
                             controlRef={cameraControlSmall}
-                            setRotationState={setSmallRotation}
                             item={model}
                             size={size}
                             isMobile={isMobile}
@@ -314,7 +387,6 @@ const Model = () => {
                             groupRef={large}
                             gsapType="view2"
                             controlRef={cameraControlLarge}
-                            setRotationState={setLargeRotation}
                             item={model}
                             size={size}
                             isMobile={isMobile}

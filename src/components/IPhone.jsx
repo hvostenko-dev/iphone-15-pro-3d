@@ -4,12 +4,14 @@ Optimized for high-performance interactive 3D rendering
 */
 
 import * as THREE from 'three';
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useGLTF, useTexture } from "@react-three/drei";
+import gsap from "gsap";
 import { blackImg, blueImg, whiteImg, yellowImg } from "../utils";
 
 function Model(props) {
     const { nodes, materials } = useGLTF("/models/scene.glb");
+    const isFirstColorRender = useRef(true);
 
     const texture = useTexture(props.item.img, (loadedTexture) => {
         loadedTexture.colorSpace = THREE.SRGBColorSpace;
@@ -31,9 +33,24 @@ function Model(props) {
             "pIJKfZsazmcpEiU" // screen
         ]);
 
+        const isFirst = isFirstColorRender.current;
+        if (isFirst) {
+            isFirstColorRender.current = false;
+        }
+
         Object.entries(materials).forEach(([name, material]) => {
             if (!excludedMaterials.has(name) && material.color) {
-                material.color.copy(targetColor);
+                if (isFirst) {
+                    material.color.copy(targetColor);
+                } else {
+                    gsap.to(material.color, {
+                        r: targetColor.r,
+                        g: targetColor.g,
+                        b: targetColor.b,
+                        duration: 0.55,
+                        ease: "power2.out",
+                    });
+                }
                 // Give titanium frame a luxurious metallic sheen
                 if (material.metalness !== undefined) {
                     material.metalness = 0.88;

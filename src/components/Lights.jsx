@@ -26,7 +26,7 @@ const Lights = ({ mood = "studio" }) => {
 
     return (
         <group name="lights">
-            <Environment resolution={256} frames={1}>
+            <Environment key={mood} resolution={256} frames={1}>
                 <group>
                     <Lightformer
                         form="rect"
