@@ -98,16 +98,18 @@ const Model = () => {
     const [smallRotation, setSmallRotation] = useState(0);
     const [largeRotation, setLargeRotation] = useState(0);
 
-    const tlRef = useRef(null);
     const sectionRef = useRef(null);
 
-    // Pause WebGL rendering when off-screen to eliminate background GPU drain
+    // Warm up and pause WebGL rendering with a comfortable rootMargin so it enters buttery smooth
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
                 setIsSectionInView(entry.isIntersecting);
             },
-            { threshold: 0.1 }
+            {
+                threshold: 0.05,
+                rootMargin: "350px 0px",
+            }
         );
 
         if (sectionRef.current) {
@@ -125,48 +127,70 @@ const Model = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    // Smooth model transition between 6.1" and 6.7" Pro sizes
     useEffect(() => {
-        if (!tlRef.current) {
-            tlRef.current = gsap.timeline();
-        }
-        const tl = tlRef.current;
+        const tl = gsap.timeline();
         if (size === "large") {
             animateWithGsapTimeline(tl, small, smallRotation, "#view1", "#view2", {
                 transform: "translateX(-100%)",
-                duration: 1.4,
+                duration: 1.1,
             });
+            if (cameraControlSmall.current?.object && cameraControlLarge.current?.object) {
+                cameraControlLarge.current.object.position.copy(cameraControlSmall.current.object.position);
+                cameraControlLarge.current.update();
+            }
         }
 
         if (size === "small") {
             animateWithGsapTimeline(tl, large, largeRotation, "#view2", "#view1", {
                 transform: "translateX(0)",
-                duration: 1.4,
+                duration: 1.1,
             });
+            if (cameraControlLarge.current?.object && cameraControlSmall.current?.object) {
+                cameraControlSmall.current.object.position.copy(cameraControlLarge.current.object.position);
+                cameraControlSmall.current.update();
+            }
         }
-    }, [size, smallRotation, largeRotation]);
+    }, [size]);
 
+    // Silky camera orbit to preset inspection angles without jumping or resetting
     const handleAnglePreset = (spot) => {
         sounds.playClick();
         setActiveHotspot(spot.id);
         setAutoRotate(false);
-        const targetRef = size === "small" ? small : large;
         const targetControl = size === "small" ? cameraControlSmall : cameraControlLarge;
 
-        if (targetControl.current) {
-            targetControl.current.reset();
+        if (targetControl?.current?.object) {
+            const radius = 4;
+            const targetX = radius * Math.sin(spot.angle);
+            const targetZ = radius * Math.cos(spot.angle);
+
+            gsap.to(targetControl.current.object.position, {
+                x: targetX,
+                y: 0,
+                z: targetZ,
+                duration: 0.9,
+                ease: "power2.inOut",
+                onUpdate: () => {
+                    targetControl.current.update();
+                },
+            });
         }
-        gsap.to(targetRef.current.rotation, {
-            y: spot.angle,
-            duration: 0.9,
-            ease: "power2.out",
-        });
-        if (size === "small") setSmallRotation(spot.angle);
-        else setLargeRotation(spot.angle);
     };
 
     useGSAP(() => {
         animateWithGsap("#heading", { y: 0, opacity: 1 });
-        animateWithGsap("#model-subheading", { y: 0, opacity: 1, delay: 0.2 });
+        animateWithGsap("#model-subheading", { y: 0, opacity: 1, delay: 0.15 });
+        gsap.to("#model-container", {
+            scrollTrigger: {
+                trigger: "#model",
+                start: "top 75%",
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1.1,
+            ease: "power2.out",
+        });
     }, []);
 
     const currentSpecs = useMemo(() => sizeSpecs[size], [size]);
@@ -189,7 +213,10 @@ const Model = () => {
 
                 <div className="flex flex-col items-center mt-3">
                     {/* 3D Canvas Container */}
-                    <div className="w-full h-[62vh] sm:h-[75vh] md:h-[82vh] overflow-hidden relative rounded-3xl bg-gradient-to-b from-white/[0.04] to-black border border-white/15 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-md">
+                    <div
+                        id="model-container"
+                        className="w-full h-[62vh] sm:h-[75vh] md:h-[82vh] overflow-hidden relative rounded-3xl bg-gradient-to-b from-white/[0.04] to-black border border-white/15 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-md opacity-0 translate-y-8"
+                    >
                         
                         {/* Dynamic Titanium Ambient Glow */}
                         <div

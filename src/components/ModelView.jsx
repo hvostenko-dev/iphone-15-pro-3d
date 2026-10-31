@@ -3,7 +3,8 @@ import * as THREE from "three";
 import Lights from "./Lights";
 import Loader from "./Loader";
 import IPhone from "./IPhone";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
+import gsap from "gsap";
 
 const ModelView = ({
     index,
@@ -27,6 +28,21 @@ const ModelView = ({
               ? [15, 15, 15]
               : [17, 17, 17];
 
+    useEffect(() => {
+        if (groupRef.current) {
+            gsap.fromTo(
+                groupRef.current.position,
+                { y: -0.4 },
+                { y: 0, duration: 1.2, ease: "power2.out", delay: 0.1 }
+            );
+            gsap.fromTo(
+                groupRef.current.rotation,
+                { y: 0.2 },
+                { y: 0, duration: 1.4, ease: "power2.out", delay: 0.1 }
+            );
+        }
+    }, [groupRef]);
+
     return (
         <View
             index={index}
@@ -48,18 +64,13 @@ const ModelView = ({
                 enableZoom={false}
                 enablePan={false}
                 enableDamping={true}
-                dampingFactor={0.06}
+                dampingFactor={0.05}
                 rotateSpeed={0.5}
                 autoRotate={autoRotate}
-                autoRotateSpeed={1.8}
+                autoRotateSpeed={1.6}
                 minPolarAngle={Math.PI / 3.2}
                 maxPolarAngle={Math.PI / 1.6}
                 target={new THREE.Vector3(0, 0, 0)}
-                onEnd={() => {
-                    if (controlRef.current) {
-                        setRotationState(controlRef.current.getAzimuthalAngle());
-                    }
-                }}
             />
 
             <group
