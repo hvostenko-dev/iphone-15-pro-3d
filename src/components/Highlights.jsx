@@ -11,7 +11,7 @@ const Highlights = () => {
     }, []);
 
     return (
-        <section id="highlights" className="w-full overflow-hidden common-padding bg-zinc relative">
+        <section id="highlights" className="w-full overflow-hidden common-padding bg-black relative">
             <div className="screen-max-width mx-auto">
                 {/* Header with Title and Film Links */}
                 <div className="mb-8 sm:mb-12 w-full flex flex-col md:flex-row md:items-end justify-between gap-4">

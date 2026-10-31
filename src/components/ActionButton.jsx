@@ -77,7 +77,7 @@ const ActionButtonSection = () => {
     };
 
     return (
-        <section id="action-button" className="common-padding bg-zinc relative overflow-hidden">
+        <section id="action-button" className="common-padding bg-black relative overflow-hidden">
             {/* Subtle radial ambient background */}
             <div
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[140px] pointer-events-none transition-all duration-700 opacity-25"
@@ -100,14 +100,14 @@ const ActionButtonSection = () => {
                 </div>
 
                 {/* Interactive Dynamic Island & Action Demo Mockup */}
-                <div className="max-w-2xl mx-auto mb-14 bg-black/90 border border-white/15 rounded-[36px] sm:rounded-[44px] p-6 sm:p-10 shadow-[0_30px_70px_rgba(0,0,0,0.9)] relative backdrop-blur-xl">
+                <div className="max-w-2xl mx-auto mb-14 bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/15 rounded-[36px] sm:rounded-[44px] p-6 sm:p-10 shadow-[0_30px_70px_rgba(0,0,0,0.9)] relative backdrop-blur-xl">
                     
                     {/* Simulated Dynamic Island Pill */}
                     <div className="flex justify-center mb-10">
                         <div
-                            className={`h-9 px-5 rounded-full bg-neutral-900 border border-white/10 flex items-center gap-3 transition-all duration-500 shadow-2xl ${
+                            className={`h-9 px-5 rounded-full bg-black/95 border border-white/15 flex items-center gap-3 transition-all duration-500 shadow-2xl ${
                                 isTriggered
-                                    ? "scale-105 border-white/30 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+                                    ? "scale-105 border-white/40 shadow-[0_0_20px_rgba(255,255,255,0.25)]"
                                     : ""
                             }`}
                         >
@@ -125,7 +125,7 @@ const ActionButtonSection = () => {
                     </div>
 
                     {/* Simulated Side Profile of Phone with Action Button */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-6 bg-zinc/70 border border-white/10 rounded-3xl p-6 sm:p-8">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-6 bg-black/90 border border-white/10 rounded-3xl p-6 sm:p-8">
                         <div className="flex items-center gap-4">
                             <div className="relative">
                                 {/* Action button physical trigger animation */}
@@ -150,7 +150,7 @@ const ActionButtonSection = () => {
                         <button
                             type="button"
                             onClick={() => handlePressButton(activeMode)}
-                            className="px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 active:scale-95 shadow-md flex items-center gap-2"
+                            className="px-6 py-3 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-200 active:scale-95 shadow-md flex items-center gap-2 cursor-pointer hover:scale-105"
                             style={{
                                 backgroundColor: isTriggered ? activeMode.color : "white",
                                 color: isTriggered ? "white" : "black",
@@ -171,10 +171,10 @@ const ActionButtonSection = () => {
                                 key={mode.id}
                                 type="button"
                                 onClick={() => handlePressButton(mode)}
-                                className={`action-card p-4 rounded-2xl border text-left transition-all duration-300 group hover:-translate-y-1 ${
+                                className={`action-card p-4 rounded-2xl border text-left transition-all duration-300 group hover:-translate-y-1 cursor-pointer ${
                                     isSelected
-                                        ? "bg-white/10 border-white/40 shadow-lg"
-                                        : "bg-zinc/60 border-white/10 hover:border-white/20"
+                                        ? "bg-white/15 border-white/40 shadow-lg scale-[1.02]"
+                                        : "bg-white/[0.03] border-white/10 hover:border-white/25 hover:bg-white/[0.06]"
                                 }`}
                             >
                                 <div className="text-2xl mb-2 transition-transform group-hover:scale-110">

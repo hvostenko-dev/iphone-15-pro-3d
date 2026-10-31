@@ -8,7 +8,7 @@ const specsData = [
         description: "The same alloy used by NASA for spacecraft sent to Mars. Precision contoured edges and the thinnest borders on iPhone.",
         stat: "187g",
         statLabel: "Lightest Pro model ever",
-        gradient: "from-amber-200/20 via-zinc-800 to-transparent",
+        gradient: "from-amber-200/10 via-white/[0.03] to-transparent",
     },
     {
         title: "A17 Pro Chip",
@@ -16,7 +16,7 @@ const specsData = [
         description: "6-core GPU with hardware-accelerated ray tracing up to 4x faster than software ray tracing. Console-level gaming.",
         stat: "Up to 20%",
         statLabel: "Faster GPU graphics",
-        gradient: "from-blue/20 via-zinc-800 to-transparent",
+        gradient: "from-blue/15 via-white/[0.03] to-transparent",
     },
     {
         title: "Pro Camera System",
@@ -24,7 +24,7 @@ const specsData = [
         description: "The equivalent of 7 pro lenses in your pocket. 24mm, 28mm, and 35mm focal lengths plus 5x optical zoom on Pro Max.",
         stat: "120 mm",
         statLabel: "Longest optical zoom in iPhone",
-        gradient: "from-purple-500/20 via-zinc-800 to-transparent",
+        gradient: "from-purple-500/15 via-white/[0.03] to-transparent",
     },
     {
         title: "USB-C with USB 3",
@@ -32,7 +32,7 @@ const specsData = [
         description: "Supports USB 3 for a huge leap in data transfer speeds and video workflow with direct external ProRes recording.",
         stat: "20x",
         statLabel: "Faster data transfers",
-        gradient: "from-emerald-500/20 via-zinc-800 to-transparent",
+        gradient: "from-emerald-500/15 via-white/[0.03] to-transparent",
     },
 ];
 

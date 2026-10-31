@@ -127,7 +127,7 @@ const HowItWorks = () => {
                     </p>
                 </div>
 
-                <div className="hiw-text-container bg-zinc/40 border border-white/10 rounded-3xl p-6 sm:p-10 backdrop-blur-md">
+                <div className="hiw-text-container bg-gradient-to-b from-white/[0.05] to-white/[0.02] border border-white/10 rounded-3xl p-6 sm:p-10 backdrop-blur-xl shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
                     <div className="flex flex-1 justify-center flex-col gap-4 sm:gap-6">
                         <p className="hiw-text g_fadeIn">
                             A17 Pro is an entirely new class of iPhone chip that delivers our{" "}

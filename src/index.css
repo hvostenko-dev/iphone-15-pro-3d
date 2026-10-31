@@ -29,6 +29,7 @@ html {
 }
 
 body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: white;
   width: 100%;
   min-height: 100%;
@@ -37,6 +38,7 @@ body {
   border-color: #3b3b3b;
   user-select: none;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .screen-max-width {
@@ -75,11 +77,11 @@ body {
   }
 
   .color-container {
-    @apply flex items-center justify-center px-4 py-3 sm:py-3.5 rounded-full bg-zinc/90 backdrop-blur-xl border border-white/10;
+    @apply flex items-center justify-center px-4 py-3 sm:py-3.5 rounded-full bg-black/90 backdrop-blur-xl border border-white/10;
   }
 
   .size-btn-container {
-    @apply flex items-center justify-center p-1 rounded-full bg-zinc/90 backdrop-blur-xl border border-white/10 gap-1;
+    @apply flex items-center justify-center p-1 rounded-full bg-black/90 backdrop-blur-xl border border-white/10 gap-1;
   }
 
   .size-btn {
@@ -115,7 +117,7 @@ body {
   }
 
   .control-btn {
-    @apply ml-3 sm:ml-4 p-3.5 sm:p-4 rounded-full bg-zinc/90 border border-white/10 backdrop-blur-xl flex-center hover:bg-white/20 active:scale-95 transition-all;
+    @apply ml-3 sm:ml-4 p-3.5 sm:p-4 rounded-full bg-black/90 border border-white/10 backdrop-blur-xl flex-center hover:bg-white/20 active:scale-95 transition-all;
   }
 
   .hero-title {

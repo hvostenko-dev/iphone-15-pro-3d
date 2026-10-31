@@ -73,7 +73,7 @@ const Navbar = () => {
                         type="button"
                         onClick={handleToggleMute}
                         title={isMuted ? "Enable sound effects" : "Mute sound effects"}
-                        className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border flex items-center gap-1.5 transition-all ${
+                        className={`px-2.5 py-1 rounded-full text-[11px] font-semibold border flex items-center gap-1.5 transition-all cursor-pointer ${
                             !isMuted
                                 ? "bg-blue/15 border-blue/40 text-blue shadow-[0_0_12px_rgba(41,151,255,0.25)]"
                                 : "bg-white/5 border-white/10 text-gray hover:text-white"
@@ -86,14 +86,14 @@ const Navbar = () => {
                     <a
                         href="#highlights"
                         aria-label="Search"
-                        className="opacity-75 hover:opacity-100 transition-opacity hover:scale-105"
+                        className="opacity-75 hover:opacity-100 transition-opacity hover:scale-105 cursor-pointer"
                     >
                         <img src={searchImg} alt="search" width={16} height={16} />
                     </a>
                     <a
                         href="#model"
                         aria-label="Shopping Bag"
-                        className="opacity-75 hover:opacity-100 transition-opacity hover:scale-105"
+                        className="opacity-75 hover:opacity-100 transition-opacity hover:scale-105 cursor-pointer"
                     >
                         <img src={bagImg} alt="bag" width={16} height={16} />
                     </a>
@@ -104,7 +104,7 @@ const Navbar = () => {
                         aria-label="Toggle Menu"
                         aria-expanded={mobileMenuOpen}
                         onClick={() => setMobileMenuOpen((prev) => !prev)}
-                        className="lg:hidden flex flex-col justify-center items-center w-8 h-8 rounded-full hover:bg-white/10 transition-colors"
+                        className="lg:hidden flex flex-col justify-center items-center w-8 h-8 rounded-full hover:bg-white/10 transition-colors cursor-pointer"
                     >
                         <span
                             className={`block w-4 h-0.5 bg-white rounded-full transition-all duration-300 ${
@@ -122,7 +122,7 @@ const Navbar = () => {
 
             {/* Mobile Dropdown Menu */}
             {mobileMenuOpen && (
-                <div className="lg:hidden absolute top-full left-0 w-full bg-zinc/95 backdrop-blur-2xl border-b border-white/10 px-6 py-6 flex flex-col gap-4 shadow-2xl animate-fadeIn max-h-[85vh] overflow-y-auto">
+                <div className="lg:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-2xl border-b border-white/10 px-6 py-6 flex flex-col gap-4 shadow-2xl animate-fadeIn max-h-[85vh] overflow-y-auto">
                     <p className="text-[11px] uppercase tracking-widest text-gray font-semibold">
                         Explore iPhone 15 Pro
                     </p>

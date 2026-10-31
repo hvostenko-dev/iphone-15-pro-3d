@@ -38,7 +38,7 @@ const CameraStudio = () => {
     };
 
     return (
-        <section id="camera-studio" className="common-padding bg-zinc relative overflow-hidden">
+        <section id="camera-studio" className="common-padding bg-black relative overflow-hidden">
             {/* Ambient Background Glow */}
             <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-purple-600/10 rounded-full blur-[140px] pointer-events-none" />
 
@@ -58,7 +58,7 @@ const CameraStudio = () => {
                 {/* Simulated iOS Camera Viewfinder */}
                 <div
                     id="camera-viewfinder"
-                    className="max-w-3xl mx-auto rounded-[32px] sm:rounded-[40px] bg-black border border-white/15 p-4 sm:p-6 shadow-[0_30px_80px_rgba(0,0,0,0.9)] opacity-0 translate-y-10"
+                    className="max-w-3xl mx-auto rounded-[32px] sm:rounded-[40px] bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/15 p-4 sm:p-6 shadow-[0_30px_80px_rgba(0,0,0,0.9)] opacity-0 translate-y-10 backdrop-blur-xl"
                 >
                     {/* Viewfinder Header */}
                     <div className="flex items-center justify-between text-xs text-white/80 px-2 sm:px-4 py-2 border-b border-white/10 mb-3">
@@ -75,8 +75,8 @@ const CameraStudio = () => {
                                     sounds.playClick();
                                     setShowGrid((prev) => !prev);
                                 }}
-                                className={`px-2.5 py-1 rounded-full border text-[11px] transition-colors ${
-                                    showGrid ? "border-blue text-blue bg-blue/10" : "border-white/15 text-gray"
+                                className={`px-2.5 py-1 rounded-full border text-[11px] cursor-pointer transition-colors ${
+                                    showGrid ? "border-blue text-blue bg-blue/10" : "border-white/15 text-gray hover:text-white"
                                 }`}
                             >
                                 Grid 3x3
@@ -88,7 +88,7 @@ const CameraStudio = () => {
                     </div>
 
                     {/* Viewfinder Frame Screen */}
-                    <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full rounded-2xl overflow-hidden bg-neutral-900 border border-white/10">
+                    <div className="relative aspect-[4/3] sm:aspect-[16/10] w-full rounded-2xl overflow-hidden bg-black border border-white/10">
                         {/* Shutter Flash Effect */}
                         {isFlashing && (
                             <div className="absolute inset-0 bg-white z-30 animate-pulse pointer-events-none" />
@@ -144,7 +144,7 @@ const CameraStudio = () => {
                                     key={item.label}
                                     type="button"
                                     onClick={() => handleSelectFocal(item)}
-                                    className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                                    className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer ${
                                         isCurrent
                                             ? "bg-white text-black scale-110 shadow-lg"
                                             : "bg-white/10 text-white/80 hover:bg-white/20 hover:text-white"
@@ -169,7 +169,7 @@ const CameraStudio = () => {
                             type="button"
                             aria-label="Capture photo"
                             onClick={handleSnapPhoto}
-                            className="w-14 h-14 rounded-full border-4 border-white flex-center p-1 hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                            className="w-14 h-14 rounded-full border-4 border-white flex-center p-1 hover:scale-105 active:scale-95 transition-all shadow-[0_0_25px_rgba(255,255,255,0.35)] cursor-pointer"
                         >
                             <span className="w-full h-full rounded-full bg-white transition-transform active:scale-90" />
                         </button>

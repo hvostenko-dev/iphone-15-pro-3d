@@ -141,7 +141,7 @@ const VideoCarousel = () => {
                     type="button"
                     onClick={handlePrev}
                     aria-label="Previous Highlight"
-                    className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-black/85 text-white/80 hover:text-white border border-white/15 backdrop-blur-md items-center justify-center transition-all hover:scale-105 active:scale-95"
+                    className="hidden sm:flex absolute left-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-black/85 text-white/80 hover:text-white border border-white/15 backdrop-blur-md items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
                 >
                     ‹
                 </button>
@@ -149,7 +149,7 @@ const VideoCarousel = () => {
                     type="button"
                     onClick={handleNext}
                     aria-label="Next Highlight"
-                    className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-black/85 text-white/80 hover:text-white border border-white/15 backdrop-blur-md items-center justify-center transition-all hover:scale-105 active:scale-95"
+                    className="hidden sm:flex absolute right-4 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/60 hover:bg-black/85 text-white/80 hover:text-white border border-white/15 backdrop-blur-md items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer"
                 >
                     ›
                 </button>
@@ -158,7 +158,7 @@ const VideoCarousel = () => {
             {/* Carousel Control Bar & Progress Indicator */}
             <div className="flex items-center justify-center gap-3 sm:gap-4 mt-6 sm:mt-8">
                 {/* Progress Indicators */}
-                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-neutral-900/90 border border-white/10 backdrop-blur-xl shadow-lg">
+                <div className="flex items-center gap-2 px-5 py-3 rounded-full bg-black/90 border border-white/10 backdrop-blur-xl shadow-lg">
                     {hightlightsSlides.map((slide, i) => {
                         const isCurrent = videoId === i;
                         return (
@@ -167,7 +167,7 @@ const VideoCarousel = () => {
                                 type="button"
                                 aria-label={`Go to slide ${i + 1}`}
                                 onClick={() => handleSelectSlide(i)}
-                                className={`h-2.5 rounded-full relative overflow-hidden transition-all duration-300 ${
+                                className={`h-2.5 rounded-full relative overflow-hidden transition-all duration-300 cursor-pointer ${
                                     isCurrent ? "w-10 sm:w-14 bg-white/20" : "w-2.5 bg-white/20 hover:bg-white/40"
                                 }`}
                             >
@@ -187,7 +187,7 @@ const VideoCarousel = () => {
                     type="button"
                     aria-label={isLastVideo ? "Replay video" : isPlaying ? "Pause video" : "Play video"}
                     onClick={handleTogglePlay}
-                    className="w-11 h-11 rounded-full bg-neutral-900/90 hover:bg-neutral-800 text-white border border-white/10 backdrop-blur-xl flex-center transition-all hover:scale-105 active:scale-95 shadow-lg"
+                    className="w-11 h-11 rounded-full bg-black/90 hover:bg-black text-white border border-white/10 backdrop-blur-xl flex-center transition-all hover:scale-105 active:scale-95 shadow-lg cursor-pointer"
                 >
                     <img
                         src={isLastVideo ? replayImg : isPlaying ? pauseImg : playImg}

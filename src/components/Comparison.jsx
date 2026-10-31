@@ -102,8 +102,8 @@ const Comparison = () => {
                                 key={item.name}
                                 className={`compare-col rounded-3xl p-6 sm:p-8 border transition-all duration-300 relative flex flex-col justify-between ${
                                     isLatest
-                                        ? "bg-gradient-to-b from-zinc/80 to-zinc/40 border-white/15 shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
-                                        : "bg-neutral-950/60 border-white/5 opacity-80 hover:opacity-100"
+                                        ? "bg-gradient-to-b from-white/[0.07] to-white/[0.02] border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.9)] backdrop-blur-xl"
+                                        : "bg-white/[0.02] border-white/10 opacity-80 hover:opacity-100 backdrop-blur-md"
                                 }`}
                             >
                                 <div>

@@ -176,7 +176,7 @@ const Model = () => {
     );
 
     return (
-        <section id="model" ref={sectionRef} className="common-padding relative">
+        <section id="model" ref={sectionRef} className="common-padding bg-black relative">
             <div className="screen-max-width">
                 <div className="text-center sm:text-left mb-6 sm:mb-10">
                     <h1 id="heading" className="section-heading">
@@ -189,7 +189,7 @@ const Model = () => {
 
                 <div className="flex flex-col items-center mt-3">
                     {/* 3D Canvas Container */}
-                    <div className="w-full h-[62vh] sm:h-[75vh] md:h-[82vh] overflow-hidden relative rounded-3xl bg-gradient-to-b from-zinc/80 to-black/95 border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-md">
+                    <div className="w-full h-[62vh] sm:h-[75vh] md:h-[82vh] overflow-hidden relative rounded-3xl bg-gradient-to-b from-white/[0.04] to-black border border-white/15 shadow-[0_25px_60px_rgba(0,0,0,0.85)] backdrop-blur-md">
                         
                         {/* Dynamic Titanium Ambient Glow */}
                         <div
@@ -201,7 +201,7 @@ const Model = () => {
 
                         {/* Top Toolbar: Angle Presets & Auto Spin */}
                         <div className="absolute top-4 left-0 right-0 z-20 flex flex-wrap justify-center items-center gap-2 px-4 pointer-events-none">
-                            <span className="text-xs text-white/90 bg-zinc/90 backdrop-blur-md border border-white/15 px-3.5 py-1.5 rounded-full shadow-lg">
+                            <span className="text-xs text-white/90 bg-black/90 backdrop-blur-md border border-white/15 px-3.5 py-1.5 rounded-full shadow-lg">
                                 {interactive3D ? (autoRotate ? "Auto-spinning 360°" : "Drag to rotate 360°") : "Scroll mode"}
                             </span>
 
@@ -211,10 +211,10 @@ const Model = () => {
                                     sounds.playClick();
                                     setAutoRotate((prev) => !prev);
                                 }}
-                                className={`pointer-events-auto text-xs px-3.5 py-1.5 rounded-full border transition-all shadow-lg ${
+                                className={`pointer-events-auto text-xs px-3.5 py-1.5 rounded-full border transition-all shadow-lg cursor-pointer ${
                                     autoRotate
                                         ? "bg-blue text-white border-blue shadow-blue/30 scale-105"
-                                        : "bg-zinc/90 text-white/80 hover:text-white border-white/15"
+                                        : "bg-black/90 text-white/80 hover:text-white border-white/15 hover:bg-white/10"
                                 }`}
                             >
                                 {autoRotate ? "Pause Spin" : "Auto Spin"}
@@ -225,10 +225,10 @@ const Model = () => {
                                     key={spot.id}
                                     type="button"
                                     onClick={() => handleAnglePreset(spot)}
-                                    className={`pointer-events-auto text-xs px-3 py-1.5 rounded-full border transition-all shadow-lg ${
+                                    className={`pointer-events-auto text-xs px-3 py-1.5 rounded-full border transition-all shadow-lg cursor-pointer ${
                                         activeHotspot === spot.id
                                             ? "bg-white text-black border-white font-semibold scale-105"
-                                            : "bg-zinc/90 text-white/80 hover:text-white border-white/15 hover:bg-white/10"
+                                            : "bg-black/90 text-white/80 hover:text-white border-white/15 hover:bg-white/10"
                                     }`}
                                 >
                                     {spot.label}
@@ -239,7 +239,7 @@ const Model = () => {
                                 <button
                                     type="button"
                                     onClick={() => setInteractive3D((prev) => !prev)}
-                                    className="pointer-events-auto text-xs text-blue bg-zinc/90 backdrop-blur-md border border-blue/30 px-3.5 py-1.5 rounded-full transition-all"
+                                    className="pointer-events-auto text-xs text-blue bg-black/90 backdrop-blur-md border border-blue/30 px-3.5 py-1.5 rounded-full transition-all cursor-pointer"
                                 >
                                     {interactive3D ? "Lock Scroll" : "Touch 3D"}
                                 </button>
@@ -247,7 +247,7 @@ const Model = () => {
                         </div>
 
                         {/* Studio Lighting Mood Switcher in Top Right */}
-                        <div className="absolute top-16 sm:top-4 right-4 z-20 hidden sm:flex items-center gap-1.5 bg-black/60 backdrop-blur-md border border-white/10 p-1 rounded-full">
+                        <div className="absolute top-16 sm:top-4 right-4 z-20 hidden sm:flex items-center gap-1.5 bg-black/75 backdrop-blur-md border border-white/15 p-1 rounded-full shadow-lg">
                             {lightingMoods.map((lm) => (
                                 <button
                                     key={lm.id}
@@ -257,9 +257,9 @@ const Model = () => {
                                         setLightMood(lm.id);
                                     }}
                                     title={lm.name}
-                                    className={`w-6 h-6 rounded-full flex-center transition-all ${
+                                    className={`w-6 h-6 rounded-full flex-center transition-all cursor-pointer ${
                                         lightMood === lm.id
-                                            ? "ring-2 ring-white scale-110"
+                                            ? "ring-2 ring-white scale-110 shadow-md"
                                             : "opacity-60 hover:opacity-100"
                                     }`}
                                     style={{ backgroundColor: lm.color }}
@@ -411,14 +411,14 @@ const Model = () => {
                                     sounds.playClick();
                                     setShowBuyModal(true);
                                 }}
-                                className="px-7 py-3 rounded-full bg-white text-black hover:bg-neutral-200 text-sm sm:text-base font-semibold transition-all hover:scale-105 active:scale-95 shadow-[0_4px_25px_rgba(255,255,255,0.2)]"
+                                className="px-7 py-3 rounded-full bg-white text-black hover:bg-neutral-200 text-sm sm:text-base font-semibold transition-all hover:scale-105 active:scale-95 shadow-[0_4px_25px_rgba(255,255,255,0.2)] cursor-pointer"
                             >
                                 Configure & Buy
                             </button>
                         </div>
 
                         {/* Interactive Specs Preview Card */}
-                        <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 bg-zinc/60 backdrop-blur-md border border-white/10 p-4 sm:p-5 rounded-2xl text-center">
+                        <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 bg-gradient-to-b from-white/[0.05] to-white/[0.02] backdrop-blur-xl border border-white/10 p-4 sm:p-5 rounded-2xl text-center shadow-lg">
                             <div className="p-2 border-r border-white/5 last:border-none">
                                 <p className="text-xs text-gray uppercase tracking-wider">Display</p>
                                 <p className="text-sm sm:text-base font-semibold text-white mt-1">{currentSpecs.display.split(" ")[0]} Super Retina</p>
@@ -442,8 +442,8 @@ const Model = () => {
 
             {/* Apple-style Interactive Configuration Modal */}
             {showBuyModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-fadeIn">
-                    <div className="relative w-full max-w-lg bg-zinc/95 border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-fadeIn">
+                    <div className="relative w-full max-w-lg bg-black border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl overflow-hidden">
                         {/* Close button */}
                         <button
                             type="button"

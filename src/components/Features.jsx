@@ -61,7 +61,7 @@ const Features = () => {
         <section
             id="features"
             ref={sectionRef}
-            className="h-full common-padding bg-zinc relative overflow-hidden"
+            className="h-full common-padding bg-black relative overflow-hidden"
         >
             <div className="screen-max-width">
                 <div className="mb-8 sm:mb-14 w-full">

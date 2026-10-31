@@ -30,7 +30,7 @@ const ScrollToTop = () => {
             type="button"
             onClick={scrollToTop}
             aria-label="Scroll back to top"
-            className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-zinc/80 hover:bg-zinc backdrop-blur-xl border border-white/20 text-white flex-center shadow-[0_10px_25px_rgba(0,0,0,0.8)] transition-all duration-300 hover:scale-110 active:scale-95 group"
+            className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-black/90 hover:bg-black backdrop-blur-xl border border-white/20 text-white flex-center shadow-[0_10px_25px_rgba(0,0,0,0.8)] transition-all duration-300 hover:scale-110 active:scale-95 group cursor-pointer"
         >
             <span className="text-base group-hover:-translate-y-0.5 transition-transform">
                 ↑
